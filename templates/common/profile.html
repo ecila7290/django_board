@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-3">
+    <h2 class="border-bottom py-3">PROFILE</h2>
+    <div class="row">
+        <div class="col-4">
+            
+            {% if profile_user.profile.profile_photo %}
+            <img class="round" src="{{profile_user.profile.profile_photo.url}}" width="200">
+            {% else %}
+            <img class="round" src="https://images.unsplash.com/photo-1504703395950-b89145a5425b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1251&q=80" width="200">
+            {% endif %}
+        </div>
+
+        <div class="col-6">
+            {% if profile_user.profile.nickname %}
+            <h2>{{profile_user.profile.nickname}'s profile</h2>
+            {% endif %}
+            {% if user == profile_user %}   <!-- 로그인한 사용자와 profile_user(프로필 소유자)가 일치할 때만 프로필 편집이 가능하도록 함 -->
+            <a href="#">
+                <button type="button" class="btn btn-default">프로필 편집</button></a></h2>
+            {% endif %}
+
+            <h3>
+                username: {{profile_user.username}}
+            </h3>
+        </div> 
+    </div>
+</div>
+<div class="container my-3">
+    {% if messages %}
+    <div class="alert alert-danger my-3" role="alert">
+    {% for message in messages %}
+        <strong>{{message.tags}}</strong>
+        <ul><li>{{message.message}}</li></ul>
+    {% endfor %}
+    {% endif %}
+    <div class="row">
+        <div class="col-10">
+            <h2 class="border-bottom py-3 my-3">비밀번호 변경</h2>
+            <form method="POST" action="{% url 'common:profile' user.id %}" class="by-3">
+                {% csrf_token %}
+                {{form}}
+
+            </form>
+            <button type="button" name="change_password" onclick="location.href"="'{% url 'common:change_password' %}'">변경하기</button>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
